@@ -1,0 +1,92 @@
+@use "../../scss/variables" as *;
+
+.settings {
+  height: 100vh;
+  width: 100%;
+  &__title {
+    margin-top: 20px;
+    font-size: 36px;
+    font-weight: 500;
+    color: #e7e7f9;
+  }
+  &__container {
+    width: 650px;
+    margin-left: 60px;
+  }
+  &__user {
+    display: flex;
+    margin-top: 20px;
+    border-radius: 50px;
+    width: 650px;
+    height: 200px;
+    background: $secondary-color;
+    &-avatar {
+      height: 200px;
+      width: 200px;
+      border-radius: 50px;
+    }
+    &-info {
+      margin-top: 20px;
+      margin-left: 20px;
+      &-name {
+        font-size: 24px;
+        font-weight: 500;
+        margin-bottom: 20px;
+        color: #e7e7f9;
+      }
+      &-bio {
+        font-size: 20px;
+        color: #a3a3b6;
+      }
+    }
+  }
+  &__edit {
+    margin-top: 20px;
+    &-container {
+      display: flex;
+      justify-content: space-between;
+    }
+    &-info {
+      &-title {
+        font-size: 24px;
+        font-weight: 500;
+        margin-bottom: 20px;
+        color: #e7e7f9;
+      }
+    }
+    &-password {
+      &-title {
+        font-size: 24px;
+        font-weight: 500;
+        margin-bottom: 20px;
+        color: #e7e7f9;
+      }
+    }
+
+    &-label {
+      display: block;
+      font-size: 16px;
+      color: #e7e7f9;
+      margin-bottom: 5px;
+    }
+    &-input {
+      display: block;
+      width: 270px;
+      height: 45px;
+      background: #28282c;
+      border-radius: 10px;
+      padding: 15px 20px;
+      margin-bottom: 10px;
+    }
+    &-button {
+      cursor: pointer;
+      margin-top: 20px;
+      display: block;
+      width: 270px;
+      background: #2443bd;
+      border-radius: 10px;
+      height: 45px;
+      margin-left: auto;
+    }
+  }
+}

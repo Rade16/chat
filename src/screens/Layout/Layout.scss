@@ -1,0 +1,6 @@
+@use "../../scss/variables" as *;
+.layout {
+  height: 100vh;
+  display: flex;
+  background: $bg;
+}

@@ -1,0 +1,9 @@
+@use "../../scss/variables" as *;
+
+.message {
+  width: fit-content;
+  padding: 10px 20px;
+  background: #2a2a82;
+  border-radius: 50px 50px 50px 0px;
+  margin-top: 10px;
+}

@@ -1,0 +1,60 @@
+@use "../../scss/variables" as *;
+.login {
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: $bg;
+  &__container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  &__form {
+    width: 340px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-radius: 15px;
+
+    &-title {
+      font-size: 36px;
+      margin-bottom: 20px;
+      font-weight: 500;
+    }
+    &-input {
+      width: 100%;
+      height: 45px;
+      border: solid 1px #37373e;
+      border-radius: 15px;
+      padding: 15px 20px;
+      margin-bottom: 10px;
+      &::placeholder {
+        color: #37373e;
+        font-weight: 500;
+      }
+    }
+    &-button {
+      cursor: pointer;
+      width: 100%;
+      height: 45px;
+      border-radius: 50px;
+      background: $btn-color;
+      color: $color;
+      margin-top: 10px;
+    }
+  }
+  &__text {
+    margin-top: 10px;
+    color: #37373e;
+    font-size: 16px;
+    font-weight: 500;
+  }
+  &__link {
+    cursor: pointer;
+    margin-top: 5px;
+    color: #6e6e77;
+    font-size: 16px;
+    font-weight: 500;
+  }
+}

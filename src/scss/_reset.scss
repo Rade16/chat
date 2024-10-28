@@ -1,0 +1,19 @@
+@import "./variables";
+* {
+  margin: 0;
+  padding: 0;
+  text-decoration: none;
+  list-style-type: none;
+  outline: none;
+  box-sizing: border-box;
+  font-family: "Inter", sans-serif;
+  border: none;
+  background: none;
+  font-weight: 400;
+  font-size: 16px;
+  color: $color;
+}
+
+body {
+  background: #f3f3f3;
+}
