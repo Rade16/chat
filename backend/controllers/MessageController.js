@@ -30,6 +30,37 @@ class MessageController {
         .json({ message: "Failed to fetch messages", error });
     }
   }
+  async getChats(req, res) {
+    const { userId } = req.params;
+
+    try {
+      // Найти все сообщения, где пользователь либо отправитель, либо получатель
+      const messages = await Message.findAll({
+        where: {
+          [Op.or]: [{ senderId: userId }, { receiverId: userId }],
+        },
+      });
+
+      // Группируем по уникальным пользователям
+      const uniqueUserIds = new Set();
+
+      messages.forEach((msg) => {
+        if (msg.senderId !== userId) uniqueUserIds.add(msg.senderId);
+        if (msg.receiverId !== userId) uniqueUserIds.add(msg.receiverId);
+      });
+
+      const uniqueUsers = await User.findAll({
+        where: {
+          id: Array.from(uniqueUserIds),
+        },
+      });
+
+      res.status(200).json(uniqueUsers);
+    } catch (error) {
+      console.error("Ошибка при получении данных чатов", error);
+      res.status(500).json({ error: "Ошибка сервера" });
+    }
+  }
 }
 
 module.exports = new MessageController();
