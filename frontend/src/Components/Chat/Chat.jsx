@@ -1,21 +1,29 @@
-import React, { useState, useEffect } from "react";
-import "./Chat.scss";
+import React, { useState } from "react";
 import Sidebar from "./Components/Sidebar/Sidebar";
-import Body from "./Components/Body/Body";
-import MessageBlock from "./Components/MessageBlock/MessageBlock";
+import ChatWindow from "./Components/ChatWindow/ChatWindow";
+import { useAuth } from "../../context/AuthContext";
+import "./Chat.scss";
 
-const Chat = ({ socket }) => {
-  const [messages, setMessages] = useState([]);
-  useEffect(() => {
-    socket.on("response", (data) => setMessages([...messages, data]));
-  }, [messages, socket]);
+const Chat = () => {
+  const { user } = useAuth();
+  const [selectedUser, setSelectedUser] = useState(null);
+
   return (
     <div className="chat">
-      <Sidebar socket={socket} />
-      <main className="chat__main">
-        <Body messages={messages} />
-        <MessageBlock socket={socket} />
-      </main>
+      <Sidebar
+        selectUser={setSelectedUser}
+        currentUser={user}
+        className="chat__sidebar"
+      />
+      {selectedUser ? (
+        <ChatWindow
+          className="chat-window"
+          selectedUser={selectedUser}
+          currentUser={user}
+        />
+      ) : (
+        <div>Выберите пользователя для чата</div>
+      )}
     </div>
   );
 };

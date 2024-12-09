@@ -4,16 +4,54 @@
   height: 100vh;
   background: $secondary-color;
   border-right: 1px solid $border-color;
+  &__header {
+    height: 100px;
+    width: 100%;
+    border: 1px solid $border-color;
+    display: flex;
+    align-items: center;
+    padding: 20px;
+    gap: 20px;
+    &-avatar {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: #000;
+    }
+    &-settings {
+      cursor: pointer;
+      margin-left: auto;
+    }
+    &-user {
+      &-name {
+        font-size: 20px;
+        font-weight: 500;
+        margin-bottom: 5px;
+      }
+    }
+  }
   &__title {
     font-size: 26px;
+  }
+  &__search {
+    display: block;
+    height: 60px;
+    margin: 0 auto;
+    margin-top: 20px;
+    min-width: 340px;
+    padding: 0 20px;
+    border-radius: 15px;
+    background: #1e1e21;
+    border-right: 1px solid $border-color;
   }
   &__users {
     display: flex;
     flex-direction: column;
     gap: 10px;
     &-user {
-      padding: 10px 20px;
+      padding: 20px 20px;
       display: flex;
+      height: 100px;
       align-items: center;
       gap: 10px;
       border-radius: 20px;
@@ -21,6 +59,16 @@
       transition: all 0.2s ease-in-out;
       &:hover {
         background: $border-color;
+      }
+      &-avatar {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        background: #000;
+      }
+      &-name {
+        font-size: 20px;
+        font-weight: 500;
       }
     }
   }
