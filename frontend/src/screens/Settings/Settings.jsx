@@ -2,18 +2,28 @@ import React from "react";
 import "./Settings.scss";
 
 import Avatar from "../../assets/user/avatar.jpg";
+
+import Sidebar from "../../Components/Chat/Components/Sidebar/Sidebar";
+import { useAuth } from "../../context/AuthContext";
 const Settings = () => {
+  const { user } = useAuth();
   return (
     <div className="settings">
       <div className="settings__container">
         <h1 className="settings__title">Настройки аккаунта</h1>
         <div className="settings__user">
           <img src={Avatar} alt="" className="settings__user-avatar" />
+          <label htmlFor="image" className="settings__user-upload">
+            <input
+              id="image"
+              type="file"
+              accept="image/*"
+              className="settings__user-upload-input"
+            />
+          </label>
           <div className="settings__user-info">
-            <p className="settings__user-info-name">Иван Дмитриев</p>
-            <p className="settings__user-info-bio">
-              Люблю работать в макдональдсе
-            </p>
+            <p className="settings__user-info-name">{user.username}</p>
+            <p className="settings__user-info-bio"></p>
           </div>
         </div>
         <form className="settings__edit">

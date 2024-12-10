@@ -3,8 +3,8 @@ import axios from "axios";
 import "./Sidebar.scss";
 import settings from "../../../../assets/settings.svg";
 import { useAuth } from "../../../../context/AuthContext";
-
-const Sidebar = ({ selectUser, currentUser }) => {
+import { Link } from "react-router-dom";
+const Sidebar = ({ selectUser, currentUser, onSettingsClick }) => {
   const [search, setSearch] = useState("");
   const [users, setUsers] = useState([]);
   const [chatUsers, setChatUsers] = useState([]); // Состояние для пользователей с которыми есть сообщения
@@ -59,7 +59,13 @@ const Sidebar = ({ selectUser, currentUser }) => {
         <div className="sidebar__header-user">
           <p className="sidebar__header-user-name">{currentUser?.username}</p>
         </div>
-        <img src={settings} alt="" className="sidebar__header-settings" />
+
+        <img
+          src={settings}
+          alt=""
+          className="sidebar__header-settings"
+          onClick={onSettingsClick}
+        />
       </div>
       <input
         className="sidebar__search"

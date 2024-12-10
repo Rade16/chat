@@ -14,7 +14,7 @@ import {
 import Login from "./screens/Login/Login.jsx";
 import Registration from "./screens/Registration/Registration.jsx";
 import Chat from "./Components/Chat/Chat.jsx";
-
+import Settings from "./screens/Settings/Settings.jsx";
 import { useAuth } from "./context/AuthContext";
 import axios from "axios";
 import { AuthProvider } from "./context/AuthContext";
@@ -53,7 +53,7 @@ const App = () => {
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Navigate to="/log" replace />,
+    element: <Navigate to="/login" replace />,
   },
   {
     path: "/chat",
@@ -66,6 +66,10 @@ const router = createBrowserRouter([
   {
     path: "/login",
     element: <Login />,
+  },
+  {
+    path: "/settings",
+    element: <Settings />,
   },
 ]);
 
