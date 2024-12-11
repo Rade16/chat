@@ -5,9 +5,12 @@ import { useAuth } from "../../context/AuthContext";
 import "./Chat.scss";
 import Settings from "./../../screens/Settings/Settings";
 const Chat = () => {
-  const { user } = useAuth();
   const [selectedUser, setSelectedUser] = useState(null);
   const [showSettings, setShowSettings] = useState(false);
+  const { user } = useAuth();
+  if (!user) {
+    return <p>Загрузка...</p>;
+  }
   const handleSettingsClick = () => {
     setShowSettings(true);
     setSelectedUser(null);

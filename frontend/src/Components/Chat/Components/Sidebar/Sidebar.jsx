@@ -9,6 +9,10 @@ const Sidebar = ({ selectUser, currentUser, onSettingsClick }) => {
   const [users, setUsers] = useState([]);
   const [chatUsers, setChatUsers] = useState([]); // Состояние для пользователей с которыми есть сообщения
   const token = localStorage.getItem("token");
+  const { user } = useAuth();
+  if (!user) {
+    return <p>Загрузка...</p>;
+  }
   useEffect(() => {
     const fetchChatUsers = async () => {
       try {

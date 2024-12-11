@@ -2,14 +2,17 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { io } from "socket.io-client";
 import "./ChatWindow.scss";
-
+import { useAuth } from "../../../../context/AuthContext";
 const socket = io("http://localhost:5000");
 
 const ChatWindow = ({ selectedUser, currentUser }) => {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
   const token = localStorage.getItem("token");
-
+  const { user } = useAuth();
+  if (!user) {
+    return <p>Загрузка...</p>;
+  }
   useEffect(() => {
     const fetchMessages = async () => {
       if (!currentUser?.id || !selectedUser?.id) return;

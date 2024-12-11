@@ -7,6 +7,9 @@ import Sidebar from "../../Components/Chat/Components/Sidebar/Sidebar";
 import { useAuth } from "../../context/AuthContext";
 const Settings = () => {
   const { user } = useAuth();
+  if (!user) {
+    return <p>Загрузка...</p>;
+  }
   return (
     <div className="settings">
       <div className="settings__container">
