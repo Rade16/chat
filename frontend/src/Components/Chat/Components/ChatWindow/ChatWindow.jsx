@@ -34,7 +34,6 @@ const ChatWindow = ({ selectedUser, currentUser }) => {
     fetchMessages();
 
     const handleMessageReceive = (data) => {
-      // Добавляем только полученные сообщения
       if (data.senderId !== currentUser.id) {
         setMessages((prevMessages) => [...prevMessages, data]);
       }
@@ -63,7 +62,6 @@ const ChatWindow = ({ selectedUser, currentUser }) => {
     };
 
     try {
-      // Отправка сообщения на сервер
       await axios.post(
         "http://localhost:5000/api/messages/messages",
         messageData,
@@ -72,10 +70,8 @@ const ChatWindow = ({ selectedUser, currentUser }) => {
         }
       );
 
-      // Отправка через сокет
       socket.emit("send_message", messageData);
 
-      // Локальное добавление сообщения отправителя
       setMessages((prevMessages) => [...prevMessages, messageData]);
       setNewMessage("");
     } catch (error) {
@@ -84,14 +80,30 @@ const ChatWindow = ({ selectedUser, currentUser }) => {
   };
 
   const handleKeyPress = (e) => {
-    console.log(e.key); // Проверяем, что событие срабатывает
+    console.log(e.key);
     if (e.key === "Enter") {
-      e.preventDefault(); // Предотвращаем стандартное поведение (перезагрузку страницы)
+      e.preventDefault();
       handleSend();
     }
   };
   return (
     <div className="chatWindow">
+      <div className="chatWindow__header">
+        <div className="chatWindow__user">
+          <img
+            src={`http://localhost:5000${selectedUser.avatar}`}
+            alt=""
+            className="chatWindow__user-avatar"
+          />
+          <div className="chatWindow__user-info">
+            <p className="chatWindow__user-info-name">
+              {selectedUser.username}
+            </p>
+            <p className="chatWindow__user-info-bio">{selectedUser.bio}</p>
+          </div>
+        </div>
+      </div>
+
       <div className="chatWindow__messages">
         {messages.map((msg, index) => (
           <div

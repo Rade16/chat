@@ -23,7 +23,14 @@ const Registration = () => {
       navigate("/login");
       console.log(response.data);
     } catch (error) {
-      console.error(error);
+      if (error.response && error.response.data) {
+        const { errors } = error.response.data;
+        if (Array.isArray(errors)) {
+          alert(errors.join("\n"));
+        } else {
+          alert(error.response.data.message);
+        }
+      }
     }
   };
   return (

@@ -59,9 +59,14 @@ const Sidebar = ({ selectUser, currentUser, onSettingsClick }) => {
   return (
     <div className="sidebar">
       <div className="sidebar__header">
-        <img src={""} alt="" className="sidebar__header-avatar" />
+        <img
+          src={`http://localhost:5000${currentUser?.avatar}`}
+          alt=""
+          className="sidebar__header-avatar"
+        />
         <div className="sidebar__header-user">
           <p className="sidebar__header-user-name">{currentUser?.username}</p>
+          <p className="sidebar__header-user-bio">{currentUser?.bio}</p>
         </div>
 
         <img
@@ -79,9 +84,6 @@ const Sidebar = ({ selectUser, currentUser, onSettingsClick }) => {
         onChange={(e) => setSearch(e.target.value)}
       />
       <ul>
-        {/* Пользователи с активными чатами */}
-
-        {/* Результаты поиска пользователей */}
         {users.map((user) => (
           <li
             key={user.id}
@@ -89,7 +91,11 @@ const Sidebar = ({ selectUser, currentUser, onSettingsClick }) => {
             className="sidebar__users"
           >
             <div className="sidebar__users-user">
-              <img src={""} alt="" className="sidebar__users-user-avatar" />
+              <img
+                src={`http://localhost:5000${user.avatar}`}
+                alt=""
+                className="sidebar__users-user-avatar"
+              />
               <p className="sidebar__users-user-name">{user.username}</p>
             </div>
           </li>
@@ -101,7 +107,11 @@ const Sidebar = ({ selectUser, currentUser, onSettingsClick }) => {
             className="sidebar__users"
           >
             <div className="sidebar__users-user">
-              <img src={""} alt="" className="sidebar__users-user-avatar" />
+              <img
+                src={`http://localhost:5000${user.avatar}`}
+                alt=""
+                className="sidebar__users-user-avatar"
+              />
               <p className="sidebar__users-user-name">{user.username}</p>
             </div>
           </li>

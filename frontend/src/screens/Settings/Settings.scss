@@ -22,20 +22,34 @@
     height: 200px;
     background: $secondary-color;
     &-avatar {
-      height: 200px;
-      width: 200px;
-      border-radius: 50px;
+      position: relative;
+      &-img {
+        height: 200px;
+        width: 200px;
+        border-radius: 50px;
+      }
     }
     &-upload {
+      position: absolute;
       width: 200px;
       height: 200px;
       border-radius: 50px;
-      border: 1px solid #a3a3b6;
+
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
-
+      &:hover {
+        border: 3px solid #2443bd;
+        .settings__user-upload-img {
+          display: block;
+        }
+      }
+      &-img {
+        display: none;
+        width: 100px;
+        height: 100px;
+      }
       &-input {
         display: none;
       }
@@ -50,14 +64,16 @@
         color: #e7e7f9;
       }
       &-bio {
-        font-size: 20px;
+        font-size: 18px;
         color: #a3a3b6;
+        width: 400px;
+        word-wrap: break-word;
       }
     }
   }
   &__edit {
-    margin-top: 20px;
     &-container {
+      margin-top: 30px;
       display: flex;
       justify-content: space-between;
     }
@@ -93,6 +109,11 @@
       padding: 15px 20px;
       margin-bottom: 10px;
     }
+    &-line {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+    }
     &-button {
       cursor: pointer;
       margin-top: 20px;
@@ -101,7 +122,28 @@
       background: #2443bd;
       border-radius: 10px;
       height: 45px;
-      margin-left: auto;
+      &:hover {
+        background: #1937ad;
+      }
+      &:active {
+        background: #1230a8;
+      }
+
+      &-logout {
+        background: #c91e1e;
+        cursor: pointer;
+        margin-top: 20px;
+        display: block;
+        width: 270px;
+        border-radius: 10px;
+        height: 45px;
+        &:hover {
+          background: #c90000;
+        }
+        &:active {
+          background: #d40000;
+        }
+      }
     }
   }
 }

@@ -30,7 +30,7 @@ const Chat = () => {
       />
 
       {showSettings ? (
-        <Settings /> // Отображение компонента настроек
+        <Settings />
       ) : selectedUser ? (
         <ChatWindow
           className="chat-window"

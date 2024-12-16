@@ -34,14 +34,12 @@ class MessageController {
     const { userId } = req.params;
 
     try {
-      // Найти все сообщения, где пользователь либо отправитель, либо получатель
       const messages = await Message.findAll({
         where: {
           [Op.or]: [{ senderId: userId }, { receiverId: userId }],
         },
       });
 
-      // Группируем по уникальным пользователям
       const uniqueUserIds = new Set();
 
       messages.forEach((msg) => {

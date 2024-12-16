@@ -15,13 +15,14 @@ class authController {
     try {
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
-        return res
-          .status(400)
-          .json({ message: "Ошибка при регистрации", errors });
+        return res.status(400).json({
+          message: "Ошибка при регистрации",
+          errors: errors.array().map((error) => error.msg),
+        });
       }
 
       const { username, password, email } = req.body;
-
+      const normalizedEmail = email.toLowerCase();
       const candidateByUsername = await User.findOne({ where: { username } });
       if (candidateByUsername) {
         return res
@@ -29,7 +30,9 @@ class authController {
           .json({ message: "Пользователь с таким именем уже существует" });
       }
 
-      const candidateByEmail = await User.findOne({ where: { email } });
+      const candidateByEmail = await User.findOne({
+        where: { email: normalizedEmail },
+      });
       if (candidateByEmail) {
         return res
           .status(400)
@@ -41,7 +44,7 @@ class authController {
       const user = await User.create({
         username,
         password: hashPassword,
-        email,
+        email: normalizedEmail,
       });
 
       return res.json({ message: "Пользователь успешно зарегистрирован" });
@@ -55,8 +58,8 @@ class authController {
     console.log("Полученные данные для входа:", req.body);
     try {
       const { email, password } = req.body;
-
-      const user = await User.findOne({ where: { email } });
+      const normalizedEmail = email.toLowerCase();
+      const user = await User.findOne({ where: { email: normalizedEmail } });
       if (!user) {
         return res
           .status(400)
@@ -93,6 +96,8 @@ class authController {
           id: user.id,
           username: user.username,
           email: user.email,
+          avatar: user.avatar,
+          bio: user.bio,
         },
       });
     } catch (e) {
@@ -123,16 +128,74 @@ class authController {
         where: {
           username: { [Op.iLike]: `%${search}%` }, // Проверьте Op.iLike
         },
-        attributes: ["id", "username", "email"],
       });
 
-      console.log("Users found:", users); // Логируем результат
+      console.log("Users found:", users);
       return res.json(users);
     } catch (error) {
-      console.error("Error in findUsers:", error); // Логируем ошибку
+      console.error("Error in findUsers:", error);
       return res
         .status(500)
         .json({ message: "Internal11 server error", error });
+    }
+  }
+
+  async updateUser(req, res) {
+    try {
+      console.log("Получен запрос на обновление:", req.params.id, req.body);
+      const { id } = req.params;
+      const { username, email, bio, currentPassword, newPassword } = req.body;
+      const avatar = req.file ? `/uploads/${req.file.filename}` : null;
+
+      const user = await User.findByPk(id);
+
+      if (!user) {
+        return res.status(404).json({ message: "Пользователь не найден" });
+      }
+
+      if (username && username.trim() !== "" && username !== user.username) {
+        const existingUsername = await User.findOne({ where: { username } });
+        if (existingUsername) {
+          return res.status(400).json({ message: "Имя пользователя занято" });
+        }
+        user.username = username;
+      }
+
+      if (email && email.trim() !== "" && email !== user.email) {
+        user.email = email;
+      }
+
+      if (bio && bio.trim() !== "") {
+        user.bio = bio;
+      }
+
+      if (avatar) {
+        user.avatar = avatar;
+      }
+
+      if (newPassword && newPassword.trim() !== "") {
+        if (!currentPassword || currentPassword.trim() === "") {
+          return res.status(400).json({ message: "Не указан текущий пароль" });
+        }
+
+        const isPasswordValid = bcrypt.compareSync(
+          currentPassword,
+          user.password
+        );
+        if (!isPasswordValid) {
+          return res.status(400).json({ message: "Текущий пароль неверен" });
+        }
+
+        const hashedNewPassword = bcrypt.hashSync(newPassword, 7);
+        user.password = hashedNewPassword;
+      }
+
+      await user.save();
+
+      return res.json({ message: "Пользователь успешно обновлен" });
+    } catch (error) {
+      console.error("Error in updateUser:", error);
+      return res.status(500).json({ message: "Internal server error", error });
     }
   }
 }
