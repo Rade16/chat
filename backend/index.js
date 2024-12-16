@@ -61,7 +61,7 @@ io.on("connection", (socket) => {
       socket.emit("receive_message", message);
 
       // Отправить сообщение получателю
-      io.to(receiverId).emit("receive_message", message);
+      io.to(data.receiverId).emit("receive_message", message);
     } catch (error) {
       console.error("Ошибка при сохранении сообщения:", error);
     }

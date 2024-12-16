@@ -1,18 +1,30 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { io } from "socket.io-client";
 import "./ChatWindow.scss";
 import { useAuth } from "../../../../context/AuthContext";
-const socket = io("http://localhost:5000");
 
 const ChatWindow = ({ selectedUser, currentUser }) => {
+  const socket = io("http://localhost:5000", { autoConnect: false }); // Отключаем авто-коннект
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
   const token = localStorage.getItem("token");
   const { user } = useAuth();
+
+  const messagesEndRef = useRef(null);
+
   if (!user) {
     return <p>Загрузка...</p>;
   }
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView();
+  };
+
+  useEffect(() => {
+    setMessages([]); // Очищаем сообщения при смене пользователя
+  }, [selectedUser]);
+
   useEffect(() => {
     const fetchMessages = async () => {
       if (!currentUser?.id || !selectedUser?.id) return;
@@ -26,6 +38,7 @@ const ChatWindow = ({ selectedUser, currentUser }) => {
           }
         );
         setMessages(response.data);
+        scrollToBottom();
       } catch (error) {
         console.error("Ошибка при получении сообщений:", error);
       }
@@ -34,15 +47,20 @@ const ChatWindow = ({ selectedUser, currentUser }) => {
     fetchMessages();
 
     const handleMessageReceive = (data) => {
-      if (data.senderId !== currentUser.id) {
+      if (
+        data.senderId !== currentUser.id &&
+        !messages.some((msg) => msg.id === data.id)
+      ) {
         setMessages((prevMessages) => [...prevMessages, data]);
       }
     };
 
+    socket.connect(); // Подключаем сокет
     socket.on("receive_message", handleMessageReceive);
 
     return () => {
       socket.off("receive_message", handleMessageReceive);
+      socket.disconnect(); // Отключаем сокет при размонтировании
     };
   }, [selectedUser, currentUser, token]);
 
@@ -74,18 +92,19 @@ const ChatWindow = ({ selectedUser, currentUser }) => {
 
       setMessages((prevMessages) => [...prevMessages, messageData]);
       setNewMessage("");
+      scrollToBottom();
     } catch (error) {
       console.error("Ошибка при отправке сообщения:", error);
     }
   };
 
   const handleKeyPress = (e) => {
-    console.log(e.key);
     if (e.key === "Enter") {
       e.preventDefault();
       handleSend();
     }
   };
+
   return (
     <div className="chatWindow">
       <div className="chatWindow__header">
@@ -113,6 +132,7 @@ const ChatWindow = ({ selectedUser, currentUser }) => {
             {msg.content}
           </div>
         ))}
+        <div ref={messagesEndRef} />
       </div>
       <div className="chatWindow__send">
         <input
