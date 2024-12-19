@@ -67,6 +67,10 @@ io.on("connection", (socket) => {
     }
   });
 
+  socket.on("leave_room", (userId) => {
+    socket.leave(userId);
+  });
+
   // Обработка отключения
   socket.on("disconnect", () => {
     console.log("Пользователь отключился:", socket.id);

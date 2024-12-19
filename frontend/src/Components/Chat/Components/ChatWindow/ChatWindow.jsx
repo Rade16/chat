@@ -1,11 +1,10 @@
 import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
-import { io } from "socket.io-client";
+
 import "./ChatWindow.scss";
 import { useAuth } from "../../../../context/AuthContext";
-
+import socket from "../../../socket/socket";
 const ChatWindow = ({ selectedUser, currentUser }) => {
-  const socket = io("http://localhost:5000", { autoConnect: false }); // Отключаем авто-коннект
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
   const token = localStorage.getItem("token");
@@ -21,9 +20,9 @@ const ChatWindow = ({ selectedUser, currentUser }) => {
     messagesEndRef.current?.scrollIntoView();
   };
 
-  useEffect(() => {
-    setMessages([]); // Очищаем сообщения при смене пользователя
-  }, [selectedUser]);
+  // useEffect(() => {
+  //   setMessages([]);
+  // }, [selectedUser]);
 
   useEffect(() => {
     const fetchMessages = async () => {
@@ -55,17 +54,18 @@ const ChatWindow = ({ selectedUser, currentUser }) => {
       }
     };
 
-    socket.connect(); // Подключаем сокет
+    socket.connect();
     socket.on("receive_message", handleMessageReceive);
 
     return () => {
       socket.off("receive_message", handleMessageReceive);
-      socket.disconnect(); // Отключаем сокет при размонтировании
+      socket.disconnect();
     };
   }, [selectedUser, currentUser, token]);
 
   useEffect(() => {
     if (currentUser) {
+      socket.emit("leave_room", currentUser.id);
       socket.emit("join_room", currentUser.id);
     }
   }, [currentUser]);
@@ -80,14 +80,6 @@ const ChatWindow = ({ selectedUser, currentUser }) => {
     };
 
     try {
-      await axios.post(
-        "http://localhost:5000/api/messages/messages",
-        messageData,
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
-
       socket.emit("send_message", messageData);
 
       setMessages((prevMessages) => [...prevMessages, messageData]);
@@ -143,7 +135,10 @@ const ChatWindow = ({ selectedUser, currentUser }) => {
           placeholder="Введите сообщение..."
           className="chatWindow__send-input"
         />
-        <button onClick={handleSend} className="chatWindow__send-button">
+        <button
+          onClick={() => handleSend()}
+          className="chatWindow__send-button"
+        >
           Отправить
         </button>
       </div>
